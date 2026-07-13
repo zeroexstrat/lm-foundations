@@ -9,18 +9,14 @@ from __future__ import annotations
 
 import base64
 import json
-import os
 import re
-import subprocess
-import tempfile
 from pathlib import Path
 
+from _eq_readings import EQ_READINGS
+from _viz_js import VIZ_CONTAINERS, VIZ_JS
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import PythonLexer, TextLexer, get_lexer_by_name
-
-from _eq_readings import EQ_READINGS
-from _viz_js import VIZ_JS, VIZ_CONTAINERS
 
 ROOT = Path(__file__).resolve().parent.parent
 NOTEBOOK_PATH = ROOT / "notebooks" / "99_complete_college_level_walkthrough.ipynb"
@@ -87,7 +83,6 @@ def render_code(code: str, lang: str = "python") -> str:
 
 def get_pygments_css() -> tuple[str, str]:
     """Return (dark_css, light_css) for both themes."""
-    from pygments.styles import get_style_by_name
     dark = _FORMATTER.get_style_defs(".code-block")
     light_fmt = HtmlFormatter(style="default", cssclass="code-block", nowrap=False)
     light = light_fmt.get_style_defs(".code-block")
@@ -197,10 +192,8 @@ def protect_and_process(
             if reading:
                 escaped_reading = reading.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                 reading_html = (
-                    '<span class="eq-reading-toggle"'
-                    ' onclick="this.nextElementSibling.classList.toggle(\'visible\');'
-                    ' this.classList.toggle(\'active\')"'
-                    ' title="How to read this">📖</span>'
+                    '<button type="button" class="eq-reading-toggle" aria-expanded="false"'
+                    ' title="How to read this" aria-label="Show how to read this equation">📖</button>'
                     f'<span class="eq-reading">{escaped_reading}</span>'
                 )
                 span += reading_html
@@ -910,12 +903,14 @@ tr:last-child td {{ border-bottom: none; }}
 .eq-reading-toggle {{
   display: inline-block; cursor: pointer; font-size: 0.75em;
   margin-left: 4px; opacity: 0.4; transition: opacity var(--transition);
-  user-select: none; vertical-align: middle;
+  user-select: none; vertical-align: middle; border: 0; padding: 0;
+  color: inherit; background: transparent; font-family: inherit;
 }}
 .katex-display + .eq-reading-toggle {{
   display: block; margin-top: -8px; margin-bottom: 4px; font-size: 0.8em;
 }}
 .eq-reading-toggle:hover {{ opacity: 0.7; }}
+.eq-reading-toggle:focus-visible {{ opacity: 1; outline: 2px solid var(--accent-2); outline-offset: 2px; }}
 .eq-reading-toggle.active {{ opacity: 0.8; }}
 .eq-reading {{
   display: none; font-family: var(--font-sans); font-size: 0.82rem;
@@ -925,6 +920,10 @@ tr:last-child td {{ border-bottom: none; }}
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }}
 .eq-reading.visible {{ display: block; }}
+.sr-only {{
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}}
 
 /* ═══ Search ═══ */
 #search-overlay {{ display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 200; backdrop-filter: blur(4px); }}
@@ -958,6 +957,8 @@ tr:last-child td {{ border-bottom: none; }}
   #sidebar.open {{ transform: translateX(0); }}
   #main {{ margin-left: 0; padding: 40px 20px 80px; }}
   h1 {{ font-size: 1.8rem; }}
+  code {{ overflow-wrap: anywhere; word-break: break-word; }}
+  .table-wrapper {{ overflow-x: auto; }}
   .attention-panels {{ flex-direction: column; align-items: center; }}
   #nav-toggle {{ display: flex; }}
   #toolbar {{ right: 12px; }}
@@ -997,14 +998,13 @@ const navLinks = document.querySelectorAll('#sidebar a');
 function updateActiveNav() {{
   const scrollY = window.scrollY + 80;
   let active = null;
-  for (const [secIdx, chNum] of chStarts) {{
-    const el = document.querySelectorAll('main section')[secIdx];
-    if (el && el.offsetTop <= scrollY) active = chNum;
+  for (const [slug] of chStarts) {{
+    const el = document.getElementById(slug);
+    if (el && el.offsetTop <= scrollY) active = slug;
   }}
   navLinks.forEach(a => {{
     const href = a.getAttribute('href');
-    const ch = href ? parseInt(href.match(/\\d+/)?.[0]) : null;
-    a.classList.toggle('active', ch === active);
+    a.classList.toggle('active', href === '#' + active);
   }});
 }}
 
@@ -1024,7 +1024,7 @@ window.addEventListener('scroll', () => {{ updateActiveNav(); updateProgress(); 
 
 // ═══ Collapsible h3 sections ═══
 function initCollapsibles() {{
-  document.querySelectorAll('h3.collapsible').forEach(h3 => {{
+  document.querySelectorAll('h3.collapsible').forEach((h3, index) => {{
     let content = [];
     let next = h3.nextElementSibling;
     while (next && !next.matches('h2, h3.collapsible')) {{
@@ -1033,17 +1033,47 @@ function initCollapsibles() {{
     }}
     const wrapper = document.createElement('div');
     wrapper.className = 'collapsible-content';
+    wrapper.id = 'collapsible-content-' + (index + 1);
     wrapper.style.maxHeight = 'none';
     h3.parentNode.insertBefore(wrapper, content[0] || h3.nextSibling);
     content.forEach(el => wrapper.appendChild(el));
 
-    h3.addEventListener('click', () => {{
+    h3.tabIndex = 0;
+    h3.classList.add('expanded');
+    h3.setAttribute('role', 'button');
+    h3.setAttribute('aria-controls', wrapper.id);
+    h3.setAttribute('aria-expanded', 'true');
+
+    const toggle = () => {{
       h3.classList.toggle('expanded');
       if (h3.classList.contains('expanded')) {{
         wrapper.style.maxHeight = wrapper.scrollHeight + 'px';
       }} else {{
         wrapper.style.maxHeight = '0px';
       }}
+      h3.setAttribute('aria-expanded', String(h3.classList.contains('expanded')));
+    }};
+    h3.addEventListener('click', toggle);
+    h3.addEventListener('keydown', (e) => {{
+      if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); toggle(); }}
+    }});
+  }});
+}}
+
+function initEquationReadings() {{
+  document.querySelectorAll('.eq-reading-toggle').forEach((button, index) => {{
+    const reading = button.nextElementSibling;
+    if (!reading) return;
+    reading.id = 'eq-reading-' + (index + 1);
+    button.setAttribute('aria-controls', reading.id);
+    button.addEventListener('click', () => {{
+      reading.classList.toggle('visible');
+      button.classList.toggle('active');
+      const expanded = reading.classList.contains('visible');
+      button.setAttribute('aria-expanded', String(expanded));
+      button.setAttribute('aria-label', expanded
+        ? 'Hide how to read this equation'
+        : 'Show how to read this equation');
     }});
   }});
 }}
@@ -1138,6 +1168,7 @@ function renderAllMath() {{
 document.addEventListener('DOMContentLoaded', () => {{
   renderAllMath();
   initCollapsibles();
+  initEquationReadings();
   initCopyButtons();
   buildSearchIndex();
   updateActiveNav();
@@ -1304,7 +1335,8 @@ def build_html(
             final_sections.append(quiz)
 
     content_html = "\n".join(final_sections)
-    ch_starts_json = json.dumps([[s[1], s[2]] for s in chapter_starts])
+    ch_starts_json = json.dumps([[s[4], s[2]] for s in chapter_starts])
+    js = js.replace("const chStarts = [];", f"const chStarts = {ch_starts_json};")
 
     template = f"""<!DOCTYPE html>
 <html lang="en">
@@ -1320,10 +1352,10 @@ def build_html(
 <div id="progress-bar"></div>
 
 <div id="toolbar">
-  <button id="search-btn" onclick="showSearch()" title="Search (⌘K)">🔍</button>
-  <button id="font-dec" title="Decrease font">A−</button>
-  <button id="font-inc" title="Increase font">A+</button>
-  <button id="theme-toggle" title="Toggle theme"><span id="theme-icon">☀️</span></button>
+  <button id="search-btn" onclick="showSearch()" title="Search (⌘K)" aria-label="Search textbook">🔍</button>
+  <button id="font-dec" title="Decrease font" aria-label="Decrease font size">A−</button>
+  <button id="font-inc" title="Increase font" aria-label="Increase font size">A+</button>
+  <button id="theme-toggle" title="Toggle theme" aria-label="Toggle color theme"><span id="theme-icon">☀️</span></button>
 </div>
 
 <button id="nav-toggle" onclick="toggleSidebar()" aria-label="Toggle navigation">☰</button>
@@ -1361,7 +1393,7 @@ blockquote.callout-math {{ border-left-color: var(--accent-4); }}
 blockquote.callout-warn {{ border-left-color: var(--accent); }}
 </style>
 
-<button id="back-to-top" title="Back to top">↑</button>
+<button id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
 
 <div id="search-overlay" onclick="if(event.target.id==='search-overlay')hideSearch()">
   <div id="search-box">
@@ -1378,60 +1410,57 @@ blockquote.callout-warn {{ border-left-color: var(--accent); }}
     return template
 
 
+def artifact_counts(html: str) -> dict[str, int]:
+    """Count rendered textbook components without matching CSS or JavaScript text."""
+    return {
+        "chapters": html.count('<li><a href="#'),
+        "math": (
+            html.count('<span class="katex-inline">')
+            + html.count('<span class="katex-display">')
+        ),
+        "code_blocks": html.count('<div class="code-cell">'),
+        "visualizations": html.count('<div class="viz-container">'),
+    }
+
+
+def render_textbook() -> str:
+    """Render the complete self-contained textbook without writing to disk."""
+    cells = load_notebook()
+    katex_js_text = base64.b64decode(get_katex_js_b64()).decode("utf-8")
+    viz_path = ROOT / "output" / "viz_data.json"
+    viz_data_json = viz_path.read_text(encoding="utf-8") if viz_path.exists() else "null"
+    return build_html(cells, build_css(), build_js("[]"), katex_js_text, viz_data_json)
+
+
 # ═══════════════════════════════════════════════════════════════════════
 #  11. MAIN
 # ═══════════════════════════════════════════════════════════════════════
 
 def main() -> None:
-    print("Loading notebook...")
-    cells = load_notebook()
-
-    print("Encoding KaTeX JS...")
-    katex_js_b64 = get_katex_js_b64()
-    katex_js_text = base64.b64decode(katex_js_b64).decode("utf-8")
-
-    print("Building CSS (embedding fonts)...")
-    css = build_css()
-
-    print("Building JavaScript...")
-    js = build_js("[]")
-
+    print("Rendering notebook, KaTeX, styles, and interactions...")
     viz_path = ROOT / "output" / "viz_data.json"
     if viz_path.exists():
-        viz_data_json = viz_path.read_text(encoding="utf-8")
         print(f"Embedding real viz data ({viz_path.stat().st_size // 1024} KB) from viz_data.json...")
     else:
-        viz_data_json = "null"
         print("NOTE: output/viz_data.json not found — interactives will show a")
         print("      'run scripts/viz_data.py' notice instead of live data.")
 
-    print("Assembling HTML...")
-    html = build_html(cells, css, js, katex_js_text, viz_data_json)
-
-    # Fix the ch_starts in JS (now we know the actual values)
-    # Rebuild JS with actual ch_starts
-    # Actually, the JS is already embedded. Let's do a two-pass approach.
-    # For now, extract ch_starts from the built HTML and patch the JS.
-    ch_starts_match = re.search(r"const chStarts = (\[\[.*?\]\]);", html)
-    if ch_starts_match:
-        actual_ch_starts = ch_starts_match.group(1)
-        html = html.replace("const chStarts = [];", f"const chStarts = {actual_ch_starts};")
+    html = render_textbook()
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_PATH, "w") as f:
         f.write(html)
 
     size_kb = len(html) / 1024
-    math_count = html.count('katex-inline') + html.count('katex-display')
-    code_count = html.count('code-cell')
-    print(f"\n✅ Built self-contained interactive textbook")
+    counts = artifact_counts(html)
+    print("\n✅ Built self-contained interactive textbook")
     print(f"   → {OUTPUT_PATH}")
     print(f"   Size: {size_kb:.0f} KB ({size_kb/1024:.1f} MB)")
-    print(f"   Chapters: {len(re.findall(r'<h2 id=', html))}")
-    print(f"   Math expressions: {math_count} (client-side KaTeX)")
-    print(f"   Code blocks: {code_count} (Pygments)")
-    print(f"   Interactive visualizations: 5")
-    print(f"   External dependencies: 0")
+    print(f"   Chapters: {counts['chapters']}")
+    print(f"   Math expressions: {counts['math']} (client-side KaTeX)")
+    print(f"   Code blocks: {counts['code_blocks']} (Pygments)")
+    print(f"   Interactive visualizations: {counts['visualizations']}")
+    print("   External dependencies: 0")
 
 
 if __name__ == "__main__":

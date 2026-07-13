@@ -22,8 +22,8 @@ VIZ_CONTAINERS = {
     "softmax": _container(
         "🌡️", "Interactive: Temperature On Real Logits",
         "the model's actual next-token logits after ‘The model ’",
-        '<canvas id="softmax-canvas" width="720" height="330"></canvas>'
-        '<div class="viz-controls"><label>Temperature τ <span id="temp-val">1.0</span></label>'
+        '<canvas id="softmax-canvas" width="720" height="330" role="img" aria-label="Bar chart of real next-token probabilities at the selected temperature"></canvas>'
+        '<div class="viz-controls"><label for="temp-slider">Temperature τ <span id="temp-val">1.0</span></label>'
         '<input type="range" id="temp-slider" min="0.1" max="5" step="0.1" value="1">'
         '<span class="viz-readout" id="softmax-readout"></span></div>'),
 
@@ -31,34 +31,37 @@ VIZ_CONTAINERS = {
         "🔍", "Interactive: Trained Attention, Layer By Head",
         "real weights on the probe sentence — try removing the mask or the √D",
         '<div class="attention-panels"><div class="attn-panel">'
-        '<canvas id="attn-weights-canvas" width="460" height="460"></canvas></div>'
+        '<canvas id="attn-weights-canvas" width="460" height="460" role="img" aria-label="Attention-weight matrix for the selected layer and head" aria-describedby="attn-summary"></canvas></div>'
         '<div class="attn-side"><div class="viz-controls viz-stack">'
         '<label>Layer <select id="attn-layer"></select></label>'
         '<label>Head <select id="attn-head"></select></label>'
         '<label><input type="checkbox" id="attn-mask" checked> causal mask M</label>'
         '<label><input type="checkbox" id="attn-scale" checked> scale by 1/√D</label>'
-        '</div><div class="attn-info" id="attn-info"><span class="attn-placeholder">Hover a cell to inspect w<sub>t,s</sub></span></div></div></div>'),
+        '</div><div class="attn-info" id="attn-info"><span class="attn-placeholder">Hover a cell to inspect w<sub>t,s</sub></span></div>'
+        '<p class="sr-only" id="attn-summary" aria-live="polite"></p></div></div>'),
 
     "transformer": _container(
         "🏗️", "Interactive: The Residual Stream, Measured",
         "real per-stage activation norms on the probe — click a stage",
-        '<canvas id="transformer-canvas" width="720" height="440"></canvas>'),
+        '<canvas id="transformer-canvas" width="720" height="440" role="img" aria-label="Residual-stream activation norms by transformer stage"></canvas>'
+        '<div class="viz-controls"><label for="transformer-stage">Stage</label>'
+        '<select id="transformer-stage"></select><span class="viz-readout" id="transformer-readout" aria-live="polite"></span></div>'),
 
     "training": _container(
         "📉", "Interactive: A Real Training Run",
         "scrub 400 real AdamW steps — watch p(correct token) rise",
-        '<canvas id="training-canvas" width="720" height="380"></canvas>'
-        '<div class="viz-controls"><label>Checkpoint <span id="step-val">0</span></label>'
+        '<canvas id="training-canvas" width="720" height="380" role="img" aria-label="Training and validation loss with next-token probability by checkpoint"></canvas>'
+        '<div class="viz-controls"><label for="step-slider">Checkpoint <span id="step-val">0</span></label>'
         '<input type="range" id="step-slider" min="0" max="20" step="1" value="0">'
         '<span class="viz-readout" id="training-readout"></span></div>'),
 
     "generation": _container(
         "🎲", "Interactive: Decoding From Real Logits",
         "step the recorded sample; reshape its distribution with τ and top-k",
-        '<canvas id="generation-canvas" width="720" height="330"></canvas>'
+        '<canvas id="generation-canvas" width="720" height="330" role="img" aria-label="Recorded next-token distribution under temperature and top-k decoding"></canvas>'
         '<div class="viz-controls"><button id="gen-next-btn">Next token</button>'
         '<button id="gen-reset-btn">Reset</button>'
-        '<label>τ <span id="gen-temp-val">1.0</span></label>'
+        '<label for="gen-temp">τ <span id="gen-temp-val">1.0</span></label>'
         '<input type="range" id="gen-temp" min="0.1" max="3" step="0.1" value="1" style="width:110px">'
         '<label>top-k <select id="gen-topk"><option>all</option><option>10</option><option>5</option><option selected>3</option><option>1</option></select></label>'
         '<span class="gen-output" id="gen-output"></span></div>'),
@@ -66,14 +69,15 @@ VIZ_CONTAINERS = {
     "embedding": _container(
         "🗺️", "Interactive: The Learned Embedding Geometry",
         "PCA of the trained token-embedding table — hover the characters",
-        '<canvas id="embedding-canvas" width="720" height="430"></canvas>'
-        '<div class="viz-controls"><span class="viz-readout" id="embedding-readout"></span></div>'),
+        '<canvas id="embedding-canvas" width="720" height="430" role="img" aria-label="Two-dimensional PCA projection of the learned token embeddings"></canvas>'
+        '<div class="viz-controls"><label for="embedding-token">Token</label>'
+        '<select id="embedding-token"></select><span class="viz-readout" id="embedding-readout" aria-live="polite"></span></div>'),
 
     "quant": _container(
         "🎚️", "Interactive: Quantization Grid On Real Weights",
         "96 real weights from blocks[0].attn.qkv — sweep the bit width",
-        '<canvas id="quant-canvas" width="720" height="330"></canvas>'
-        '<div class="viz-controls"><label>Bits <span id="quant-bits-val">4</span></label>'
+        '<canvas id="quant-canvas" width="720" height="330" role="img" aria-label="Original and quantized model weights at the selected bit width"></canvas>'
+        '<div class="viz-controls"><label for="quant-bits">Bits <span id="quant-bits-val">4</span></label>'
         '<input type="range" id="quant-bits" min="2" max="8" step="1" value="4">'
         '<label><input type="checkbox" id="quant-sym"> symmetric</label>'
         '<span class="viz-readout" id="quant-readout"></span></div>'),
@@ -81,13 +85,13 @@ VIZ_CONTAINERS = {
     "kv": _container(
         "📦", "Interactive: KV-Cache Memory — MHA → GQA → MQA",
         "bytes = 2·L·G·D·T·B·(bytes/value): slide G between H and 1",
-        '<canvas id="kv-canvas" width="720" height="300"></canvas>'
+        '<canvas id="kv-canvas" width="720" height="300" role="img" aria-label="KV-cache memory use for the selected model dimensions and grouped-query setting"></canvas>'
         '<div class="viz-controls viz-wrap">'
-        '<label>L <span id="kv-l-val">32</span></label><input type="range" id="kv-l" min="1" max="80" value="32" style="width:80px">'
-        '<label>H <span id="kv-h-val">32</span></label><input type="range" id="kv-h" min="1" max="64" value="32" style="width:80px">'
-        '<label>D <span id="kv-d-val">128</span></label><input type="range" id="kv-d" min="32" max="256" step="32" value="128" style="width:80px">'
-        '<label>T = 2^<span id="kv-t-val">13</span></label><input type="range" id="kv-t" min="7" max="17" value="13" style="width:80px">'
-        '<label>G <span id="kv-g-val">8</span></label><input type="range" id="kv-g" min="1" max="32" value="8" style="width:80px">'
+        '<label for="kv-l">L <span id="kv-l-val">32</span></label><input type="range" id="kv-l" min="1" max="80" value="32" style="width:80px">'
+        '<label for="kv-h">H <span id="kv-h-val">32</span></label><input type="range" id="kv-h" min="1" max="64" value="32" style="width:80px">'
+        '<label for="kv-d">D <span id="kv-d-val">128</span></label><input type="range" id="kv-d" min="32" max="256" step="32" value="128" style="width:80px">'
+        '<label for="kv-t">T = 2^<span id="kv-t-val">13</span></label><input type="range" id="kv-t" min="7" max="17" value="13" style="width:80px">'
+        '<label for="kv-g">G <span id="kv-g-val">8</span></label><input type="range" id="kv-g" min="1" max="32" value="8" style="width:80px">'
         '</div>'),
 }
 
@@ -174,6 +178,7 @@ function initAttentionViz() {
   const wc = document.getElementById('attn-weights-canvas');
   const wCtx = wc.getContext('2d');
   const info = document.getElementById('attn-info');
+  const summary = document.getElementById('attn-summary');
   const selL = document.getElementById('attn-layer');
   const selH = document.getElementById('attn-head');
   const chkM = document.getElementById('attn-mask');
@@ -221,6 +226,11 @@ function initAttentionViz() {
       wCtx.fillStyle = VC.gold; wCtx.font = '11px -apple-system, sans-serif';
       wCtx.fillText('⚠ unscaled scores: rows saturate toward argmax (lower temperature)', M.left, M.top + T * cell + 18);
     }
+    const strongest = cur.map((row, t) => {
+      const s = row.indexOf(Math.max(...row));
+      return `${vizTok(A.tokens[t])}→${vizTok(A.tokens[s])} ${row[s].toFixed(3)}`;
+    });
+    summary.textContent = `Layer ${+selL.value + 1}, head ${+selH.value + 1}. Strongest attention by query token: ${strongest.join('; ')}.`;
   }
   wc.addEventListener('mousemove', (e) => {
     const r = wc.getBoundingClientRect();
@@ -244,10 +254,13 @@ function initTransformerViz() {
   if (vizMissing('transformer-canvas')) return;
   const canvas = document.getElementById('transformer-canvas');
   const ctx = canvas.getContext('2d');
+  const stageSelect = document.getElementById('transformer-stage');
+  const readout = document.getElementById('transformer-readout');
   const W = canvas.width, H = canvas.height;
   const flow = VIZ.flow;
   const tokens = VIZ.attention.tokens;
   let selected = flow.length - 1;
+  flow.forEach((stage, i) => stageSelect.add(new Option(stage.name, i)));
 
   const colors = [VC.dim, VC.accent, VC.blue, VC.accent, VC.blue, VC.purple];
   const stageColor = (i) => i === 0 ? VC.dim : (i === flow.length - 1 ? VC.purple : (flow[i].name.includes('Attn') ? VC.accent : VC.blue));
@@ -282,6 +295,8 @@ function initTransformerViz() {
     });
     // per-token norms of selected stage
     const pt = flow[selected].per_token, maxPt = Math.max(...pt);
+    stageSelect.value = String(selected);
+    readout.textContent = `${flow[selected].name}: mean norm ${flow[selected].mean.toFixed(3)}; per-token norms ${pt.map(v => v.toFixed(2)).join(', ')}`;
     const px0 = boxX + boxW + 60, pw = 24;
     pt.forEach((v, t) => {
       const h = (v / maxPt) * 66;
@@ -298,6 +313,7 @@ function initTransformerViz() {
     const i = Math.floor((y - 34) / gapY);
     if (i >= 0 && i < flow.length) { selected = i; draw(); }
   });
+  stageSelect.addEventListener('change', () => { selected = Number(stageSelect.value); draw(); });
   draw();
 }
 
@@ -433,6 +449,7 @@ function initEmbeddingViz() {
   if (vizMissing('embedding-canvas')) return;
   const canvas = document.getElementById('embedding-canvas');
   const ctx = canvas.getContext('2d');
+  const tokenSelect = document.getElementById('embedding-token');
   const readout = document.getElementById('embedding-readout');
   const W = canvas.width, H = canvas.height;
   const E = VIZ.embedding;
@@ -443,6 +460,7 @@ function initEmbeddingViz() {
   const py = (y) => pad + (y - y0) / (y1 - y0) * (H - 2 * pad);
   const cls = (ch) => /\s/.test(ch) ? VC.dim : /[aeiou]/i.test(ch) ? VC.accent : /[a-z]/i.test(ch) ? VC.blue : VC.purple;
   let hover = -1;
+  E.labels.forEach((label, i) => tokenSelect.add(new Option(vizTok(label), i)));
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
@@ -461,7 +479,10 @@ function initEmbeddingViz() {
       ctx.textAlign = 'start';
     });
     const ve = E.var_explained;
-    readout.textContent = `variance explained: PC1 ${(ve[0] * 100).toFixed(0)}%  PC2 ${(ve[1] * 100).toFixed(0)}% — nearby characters behave alike under every later linear map`;
+    const selectedText = hover >= 0
+      ? `token ${vizTok(E.labels[hover])}: PC1 ${E.xy[hover][0].toFixed(3)}, PC2 ${E.xy[hover][1].toFixed(3)}. `
+      : '';
+    readout.textContent = `${selectedText}variance explained: PC1 ${(ve[0] * 100).toFixed(0)}%  PC2 ${(ve[1] * 100).toFixed(0)}% — nearby characters behave alike under every later linear map`;
   }
   canvas.addEventListener('mousemove', (e) => {
     const r = canvas.getBoundingClientRect();
@@ -471,8 +492,10 @@ function initEmbeddingViz() {
       const dX = px(E.xy[i][0]) - mx, dY = py(E.xy[i][1]) - my;
       if (dX * dX + dY * dY < 140) hover = i;
     });
+    tokenSelect.value = hover >= 0 ? String(hover) : '';
     draw();
   });
+  tokenSelect.addEventListener('change', () => { hover = Number(tokenSelect.value); draw(); });
   draw();
 }
 
