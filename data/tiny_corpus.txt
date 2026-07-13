@@ -1,0 +1,23 @@
+The model learns by predicting the next token.
+Attention lets each token read earlier tokens.
+A tiny corpus is enough to test shapes, loss, and generation.
+We study the small system so the large system becomes less mysterious.
+
+Language modeling turns a sequence into many supervised examples.
+At one position, the context is short.
+At a later position, the context is longer.
+The same parameters must serve both cases.
+
+The token embedding table gives each symbol a learned vector.
+The position embedding table tells the model where the symbol appears.
+Self-attention compares positions with queries and keys.
+Values carry the information that gets mixed into the residual stream.
+
+A causal mask blocks the future.
+Without the mask, training loss can look better for the wrong reason.
+The model would read the answer instead of learning to predict it.
+
+Optimization changes the weights a little at a time.
+The loss is a negative log probability.
+Lower loss means the model assigned more probability to the observed next token.
+Generation reverses the perspective and samples from the model's predicted distribution.

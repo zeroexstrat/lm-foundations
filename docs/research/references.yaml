@@ -1,0 +1,417 @@
+references:
+  attention_is_all_you_need:
+    title: "Attention Is All You Need"
+    authors: "Vaswani et al."
+    year: 2017
+    primary_url: "https://arxiv.org/abs/1706.03762"
+    arxiv_id: "1706.03762"
+    modules: ["R01"]
+
+  sparse_transformers_2019:
+    title: "Generating Long Sequences with Sparse Transformers"
+    authors: "Child et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1904.10509"
+    arxiv_id: "1904.10509"
+    modules: ["R02"]
+
+  longformer_2020:
+    title: "Longformer: The Long-Document Transformer"
+    authors: "Beltagy et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2004.05150"
+    arxiv_id: "2004.05150"
+    modules: ["R02", "R06"]
+
+  big_bird_2020:
+    title: "Big Bird: Transformers for Longer Sequences"
+    authors: "Zaheer et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2007.14062"
+    arxiv_id: "2007.14062"
+    modules: ["R02"]
+
+  flashattention_2022:
+    title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness"
+    authors: "Dao et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2205.14135"
+    arxiv_id: "2205.14135"
+    modules: ["R05"]
+
+  flashattention2_2023:
+    title: "FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning"
+    authors: "Dao"
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2307.08691"
+    arxiv_id: "2307.08691"
+    modules: ["R05"]
+
+  reformer_2020:
+    title: "Reformer: The Efficient Transformer"
+    authors: "Kitaev et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2001.04451"
+    arxiv_id: "2001.04451"
+    modules: ["R03"]
+
+  linformer_2020:
+    title: "Linformer: Self-Attention with Linear Complexity"
+    authors: "Wang et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2006.04768"
+    arxiv_id: "2006.04768"
+    modules: ["R04"]
+
+  performer_2020:
+    title: "Rethinking Attention with Performers"
+    authors: "Choromanski et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2009.14794"
+    arxiv_id: "2009.14794"
+    modules: ["R03"]
+
+  nystromformer_2021:
+    title: "Nystromformer: A Nystrom-Based Algorithm for Approximating Self-Attention"
+    authors: "Xiong et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2102.03902"
+    arxiv_id: "2102.03902"
+    modules: ["R04"]
+
+  fast_transformer_decoding_2019:
+    title: "Fast Transformer Decoding: One Write-Head is All You Need"
+    authors: "Shazeer"
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1911.02150"
+    arxiv_id: "1911.02150"
+    modules: ["R05"]
+
+  gqa_2023:
+    title: "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints"
+    authors: "Ainslie et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2305.13245"
+    arxiv_id: "2305.13245"
+    modules: ["R05"]
+
+  transformer_xl_2019:
+    title: "Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context"
+    authors: "Dai et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1901.02860"
+    arxiv_id: "1901.02860"
+    modules: ["R06"]
+
+  memorizing_transformers_2022:
+    title: "Memorizing Transformers"
+    authors: "Wu et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2203.08913"
+    arxiv_id: "2203.08913"
+    modules: ["R06", "R14"]
+
+  structured_state_spaces_2021:
+    title: "Efficiently Modeling Long Sequences with Structured State Spaces"
+    authors: "Gu et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2111.00396"
+    arxiv_id: "2111.00396"
+    modules: ["R07"]
+
+  mamba_2023:
+    title: "Mamba: Linear-Time Sequence Modeling with Selective State Spaces"
+    authors: "Gu and Dao"
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2312.00752"
+    arxiv_id: "2312.00752"
+    modules: ["R07"]
+
+  hyena_hierarchy_2023:
+    title: "Hyena Hierarchy: Towards Larger Convolutional Language Models"
+    authors: "Poli et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2302.10866"
+    arxiv_id: "2302.10866"
+    modules: ["R07"]
+
+  rwkv_2023:
+    title: "RWKV: Reinventing RNNs for the Transformer Era"
+    authors: "Peng et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2305.13048"
+    arxiv_id: "2305.13048"
+    modules: ["R07"]
+
+  gshard_2020:
+    title: "GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding"
+    authors: "Lepikhin et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2006.16668"
+    arxiv_id: "2006.16668"
+    modules: ["R08"]
+
+  switch_transformers_2021:
+    title: "Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity"
+    authors: "Fedus et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2101.03961"
+    arxiv_id: "2101.03961"
+    modules: ["R08"]
+
+  mixtral_of_experts_2024:
+    title: "Mixtral of Experts"
+    authors: "Jiang et al."
+    year: 2024
+    primary_url: "https://arxiv.org/abs/2401.04088"
+    arxiv_id: "2401.04088"
+    modules: ["R08"]
+
+  scaling_laws_for_neural_language_models_2020:
+    title: "Scaling Laws for Neural Language Models"
+    authors: "Kaplan et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2001.08361"
+    arxiv_id: "2001.08361"
+    modules: ["R09"]
+
+  training_compute_optimal_large_language_models_2022:
+    title: "Training Compute-Optimal Large Language Models"
+    authors: "Hoffmann et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2203.15556"
+    arxiv_id: "2203.15556"
+    modules: ["R09"]
+
+  decoupled_weight_decay_regularization_2017:
+    title: "Decoupled Weight Decay Regularization"
+    authors: "Loshchilov and Hutter"
+    year: 2017
+    primary_url: "https://arxiv.org/abs/1711.05101"
+    arxiv_id: "1711.05101"
+    modules: ["R10"]
+
+  tensor_programs_v_2022:
+    title: "Tensor Programs V: Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer"
+    authors: "Yang et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2203.03466"
+    arxiv_id: "2203.03466"
+    modules: ["R10"]
+
+  zero_2019:
+    title: "ZeRO: Memory Optimizations Toward Training Trillion Parameter Models"
+    authors: "Rajbhandari et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1910.02054"
+    arxiv_id: "1910.02054"
+    modules: ["R10"]
+
+  megatron_lm_2019:
+    title: "Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism"
+    authors: "Shoeybi et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1909.08053"
+    arxiv_id: "1909.08053"
+    modules: ["R10"]
+
+  simclr_2020:
+    title: "A Simple Framework for Contrastive Learning of Visual Representations"
+    authors: "Chen et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2002.05709"
+    arxiv_id: "2002.05709"
+    modules: ["R11"]
+
+  byol_2020:
+    title: "Bootstrap Your Own Latent"
+    authors: "Grill et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2006.07733"
+    arxiv_id: "2006.07733"
+    modules: ["R11"]
+
+  barlow_twins_2021:
+    title: "Barlow Twins"
+    authors: "Zbontar et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2103.03230"
+    arxiv_id: "2103.03230"
+    modules: ["R11"]
+
+  vicreg_2021:
+    title: "VICReg"
+    authors: "Bardes et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2105.04906"
+    arxiv_id: "2105.04906"
+    modules: ["R11"]
+
+  masked_autoencoders_2021:
+    title: "Masked Autoencoders Are Scalable Vision Learners"
+    authors: "He et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2111.06377"
+    arxiv_id: "2111.06377"
+    modules: ["R11"]
+
+  i_jepa_2023:
+    title: "Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture"
+    authors: "Assran et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2301.08243"
+    arxiv_id: "2301.08243"
+    modules: ["R12"]
+
+  v_jepa_2024:
+    title: "Revisiting Feature Prediction for Learning Visual Representations from Video"
+    authors: "Bardes et al."
+    year: 2024
+    primary_url: "https://arxiv.org/abs/2404.08471"
+    arxiv_id: "2404.08471"
+    modules: ["R12"]
+
+  world_models_2018:
+    title: "World Models"
+    authors: "Ha and Schmidhuber"
+    year: 2018
+    primary_url: "https://arxiv.org/abs/1803.10122"
+    arxiv_id: "1803.10122"
+    modules: ["R13"]
+
+  dream_to_control_2019:
+    title: "Dream to Control"
+    authors: "Hafner et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1912.01603"
+    arxiv_id: "1912.01603"
+    modules: ["R13"]
+
+  muzero_2019:
+    title: "Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model"
+    authors: "Schrittwieser et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1911.08265"
+    arxiv_id: "1911.08265"
+    modules: ["R13"]
+
+  decision_transformer_2021:
+    title: "Decision Transformer"
+    authors: "Chen et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2106.01345"
+    arxiv_id: "2106.01345"
+    modules: ["R13"]
+
+  rag_2020:
+    title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+    authors: "Lewis et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2005.11401"
+    arxiv_id: "2005.11401"
+    modules: ["R14"]
+
+  retro_2021:
+    title: "Improving Language Models by Retrieving from Trillions of Tokens"
+    authors: "Borgeaud et al."
+    year: 2021
+    primary_url: "https://arxiv.org/abs/2112.04426"
+    arxiv_id: "2112.04426"
+    modules: ["R14"]
+
+  knn_lm_2019:
+    title: "Generalization through Memorization: Nearest Neighbor Language Models"
+    authors: "Khandelwal et al."
+    year: 2019
+    primary_url: "https://arxiv.org/abs/1911.00172"
+    arxiv_id: "1911.00172"
+    modules: ["R14"]
+
+  neural_turing_machines_2014:
+    title: "Neural Turing Machines"
+    authors: "Graves et al."
+    year: 2014
+    primary_url: "https://arxiv.org/abs/1410.5401"
+    arxiv_id: "1410.5401"
+    modules: ["R14"]
+
+  transformer_circuits_2021:
+    title: "A Mathematical Framework for Transformer Circuits"
+    authors: "Elhage et al."
+    year: 2021
+    primary_url: "https://transformer-circuits.pub/2021/framework/index.html"
+    arxiv_id: null
+    modules: ["R15"]
+
+  factual_associations_2022:
+    title: "Locating and Editing Factual Associations in GPT"
+    authors: "Meng et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2202.05262"
+    arxiv_id: "2202.05262"
+    modules: ["R15"]
+
+  helm_2022:
+    title: "Holistic Evaluation of Language Models"
+    authors: "Liang et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2211.09110"
+    arxiv_id: "2211.09110"
+    modules: ["R16"]
+
+  mmlu_2020:
+    title: "Measuring Massive Multitask Language Understanding"
+    authors: "Hendrycks et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2009.03300"
+    arxiv_id: "2009.03300"
+    modules: ["R16"]
+
+  big_bench_2022:
+    title: "Beyond the Imitation Game"
+    authors: "Srivastava et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2206.04615"
+    arxiv_id: "2206.04615"
+    modules: ["R16"]
+
+  training_data_extraction_2020:
+    title: "Extracting Training Data from Large Language Models"
+    authors: "Carlini et al."
+    year: 2020
+    primary_url: "https://arxiv.org/abs/2012.07805"
+    arxiv_id: "2012.07805"
+    modules: ["R16"]
+
+  gptq_2022:
+    title: "GPTQ"
+    authors: "Frantar et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2210.17323"
+    arxiv_id: "2210.17323"
+    modules: ["R17"]
+
+  awq_2023:
+    title: "AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration"
+    authors: "Lin et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2306.00978"
+    arxiv_id: "2306.00978"
+    modules: ["R17"]
+
+  qlora_2023:
+    title: "QLoRA"
+    authors: "Dettmers et al."
+    year: 2023
+    primary_url: "https://arxiv.org/abs/2305.14314"
+    arxiv_id: "2305.14314"
+    modules: ["R17"]
+
+  llm_int8_2022:
+    title: "LLM.int8()"
+    authors: "Dettmers et al."
+    year: 2022
+    primary_url: "https://arxiv.org/abs/2208.07339"
+    arxiv_id: "2208.07339"
+    modules: ["R17"]
+
