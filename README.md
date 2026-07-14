@@ -21,7 +21,9 @@ repository, no GPU, no framework — so any claim can be broken by deleting a li
 re-running. `pip install numpy scipy matplotlib` is all it needs; open it in Jupyter or
 Colab and go.
 
-**Read it rendered** (sidebar navigation, KaTeX math, live plots) at
+**Read it rendered** — a single self-contained HTML with sidebar navigation, KaTeX math, and
+live plots: [`output/the_machine_that_predicts_the_next_token.html`](output/the_machine_that_predicts_the_next_token.html)
+(open it locally in any browser), also published live at
 **[0xstrategies.com/writing/llm-from-scratch.html](https://0xstrategies.com/writing/llm-from-scratch.html)**.
 
 ### How it was made
